@@ -20,7 +20,7 @@ fourthHumanPawn = 12
 fifthHumanPawn = 13
 sixthHumanPawn = 14
 seventhHumanPawn = 15
-eigthHumanPawn = 16
+eightHumanPawn = 16
 
 #ai pieces id
 leftAIRook = 17
@@ -38,10 +38,11 @@ fourthAIPawn = 28
 fifthAIPawn = 29
 sixthAIPawn = 30
 seventhAIPawn = 31
-eigthAIPawn = 32
+eightAIPawn = 32
 
 #chess pieces type enumeration
 class PieceType(Enum):
+    empty = 0
     pawn = 1
     knight = 2
     bishop = 3
@@ -49,10 +50,8 @@ class PieceType(Enum):
     queen = 5
     king = 6
 
-class Piece:
+class Piece(object):
     #attributes
-    owner = None
-    id = None
     type = None
     
     #costructors

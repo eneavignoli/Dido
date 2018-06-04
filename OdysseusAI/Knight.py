@@ -1,9 +1,9 @@
-from Piece import Piece
+from Piece import *
 
 class Knight(Piece):
     #constructors
     def __init__(self,owner,id):
-        super(owner,id)
+        super().__init__(owner,id)
         self.type = PieceType.knight
     
     #methods

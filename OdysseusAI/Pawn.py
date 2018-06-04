@@ -1,11 +1,11 @@
-from Piece import Piece
+from Piece import *
 
 class Pawn(Piece):
     stillFixed = None
     
     #constructors
     def __init__(self,owner,id):
-        super(owner,id)
+        super().__init__(owner,id)
         self.type = PieceType.pawn
         self.stillFixed = True
     
@@ -37,7 +37,7 @@ class Pawn(Piece):
     def possibleMoves(self,board,x,y):
         availableMoves = None
         index = 0
-        if self.owner == AI:
+        if self.owner == human:
             #two squares forward if it's the first move
             if self.stillFixed:
                 if board.isEmpty(x,y-2):
