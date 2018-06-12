@@ -43,12 +43,12 @@ eightAIPawn = 32
 #chess pieces type enumeration
 class PieceType(Enum):
     empty = 0
-    pawn = 1
-    knight = 2
-    bishop = 3
-    rook = 4
-    queen = 5
-    king = 6
+    pawn = 10
+    knight = 30
+    bishop = 35
+    rook = 50
+    queen = 90
+    king = 100
 
 class Piece(object):
     #attributes

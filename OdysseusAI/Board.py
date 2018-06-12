@@ -16,7 +16,9 @@ class Board:
     
     #constructor
     def __init__(self,startPlayer):
-        self.chessBoard = [[0 for x in range(8)] for y in range(8)] 
+        self.chessBoard = [[EmptySquare() for x in range(8)] for y in range(8)]
+        self.humanCemetery = [[EmptySquare() for x in range(2)] for y in range(8)]
+        self.AICemetery = [[EmptySquare() for x in range(2)] for y in range(8)]
         self.whoMoves = startPlayer
         self.setup()
         
@@ -44,22 +46,22 @@ class Board:
         self.chessBoard[1][6] = Pawn(AI,seventhHumanPawn)
         self.chessBoard[1][7] = Pawn(AI,eightHumanPawn)
         #assign ai pieces
-        self.chessBoard[7][0] = Rook(leftAIRook,human)
-        self.chessBoard[7][1] = Knight(leftAIKnight,human)
-        self.chessBoard[7][2] = Bishop(leftAIBishop,human)
-        self.chessBoard[7][3] = Queen(AIQueen,human)
-        self.chessBoard[7][4] = King(AIKing,human)
-        self.chessBoard[7][5] = Bishop(rightAIBishop,human)
-        self.chessBoard[7][6] = Knight(rightAIKnight,human)
-        self.chessBoard[7][7] = Rook(rightAIRook,human)
-        self.chessBoard[6][0] = Pawn(firstAIPawn,human)
-        self.chessBoard[6][1] = Pawn(secondAIPawn,human)
-        self.chessBoard[6][2] = Pawn(thirdAIPawn,human)
-        self.chessBoard[6][3] = Pawn(fourthAIPawn,human)
-        self.chessBoard[6][4] = Pawn(fifthAIPawn,human)
-        self.chessBoard[6][5] = Pawn(sixthAIPawn,human)
-        self.chessBoard[6][6] = Pawn(seventhAIPawn,human)
-        self.chessBoard[6][7] = Pawn(eightAIPawn,human)
+        self.chessBoard[7][0] = Rook(human,leftAIRook)
+        self.chessBoard[7][1] = Knight(human,leftAIKnight)
+        self.chessBoard[7][2] = Bishop(human,leftAIBishop)
+        self.chessBoard[7][3] = Queen(human,AIQueen)
+        self.chessBoard[7][4] = King(human,AIKing)
+        self.chessBoard[7][5] = Bishop(human,rightAIBishop)
+        self.chessBoard[7][6] = Knight(human,rightAIKnight)
+        self.chessBoard[7][7] = Rook(human,rightAIRook)
+        self.chessBoard[6][0] = Pawn(human,firstAIPawn)
+        self.chessBoard[6][1] = Pawn(human,secondAIPawn)
+        self.chessBoard[6][2] = Pawn(human,thirdAIPawn)
+        self.chessBoard[6][3] = Pawn(human,fourthAIPawn)
+        self.chessBoard[6][4] = Pawn(human,fifthAIPawn)
+        self.chessBoard[6][5] = Pawn(human,sixthAIPawn)
+        self.chessBoard[6][6] = Pawn(human,seventhAIPawn)
+        self.chessBoard[6][7] = Pawn(human,eightAIPawn)
     
     #returns array of coordinates, elem 0 contains cemetery or board
     def find(self,type,owner,id):
@@ -98,16 +100,46 @@ class Board:
         self.chessBoard[y][x] = piece
     
     def isEmpty(self,x,y):
-        if self.chessBoard[y][x] == None:
+        if self.chessBoard[y][x] == None or self.chessBoard[y][x].getType() == PieceType.empty:
+            return True
+        else:
+            return False
+    
+    def isHumanCemEmpty(self,x,y):
+        if self.humanCemetery[y][x] == None or self.humanCemetery[y][x].getType() == PieceType.empty:
+            return True
+        else:
+            return False
+    
+    def isAICemEmpty(self,x,y):
+        if self.AICemetery[y][x] == None or self.AICemetery[y][x].getType() == PieceType.empty:
             return True
         else:
             return False
     
     def isEnemy(self,owner,x,y):
-        if self.chessBoard[y][x].getOwner != owner:
+        if self.chessBoard[y][x].getOwner() != owner:
             return True
         else:
             return False
+    
+    def isHumanCemEnemy(self,owner,x,y):
+        if self.humanCemetery[y][x].getOwner() != owner:
+            return True
+        else:
+            return False
+    
+    def isAICemEnemy(self,owner,x,y):
+        if self.AICemetery[y][x].getOwner() != owner:
+            return True
+        else:
+            return False
+    
+    def getHumanCemPieceType(self,x,y):
+        return self.humanCemetery[y][x].getType()
+    
+    def getAICemPieceType(self,x,y):
+        return self.AICemetery[y][x].getType()
     
     def getPieceType(self,x,y):
         return self.chessBoard[y][x].getType()
@@ -128,4 +160,17 @@ class Board:
                         self.AICemetery[row][column] = self.chessBoard[y][x]
                         self.chessBoard[y][x] = None
                         return
-                        
+    
+    #evaluation function for minimax
+    def eval(self):
+        minimaxValue = 0
+        #evaluating ai pieces
+        for row in range(8):
+            for column in range(8):
+                if self.chessBoard[row][column].isEmpty == False:
+                    if self.chessBoard[row][column].getOwner() == False:
+                        minimaxValue = minimaxValue + self.chessBoard[row][column].getType()
+                    else:
+                        minimaxValue = minimaxValue - self.chessBoard[row][column].getType()
+        
+        return minimaxValue
