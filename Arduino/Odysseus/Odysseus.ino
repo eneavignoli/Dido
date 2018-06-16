@@ -94,30 +94,30 @@ void setupBoard(int **board){
 }
 
 void readBoard(int **board){
-//  //security setup -> all row switched off
-//  for(int i = 0; i < 8; i++){
-//    digitalWrite(ROW[i],1);;
-//  }
-//
-//  for(int i = 0; i < 8; i++){
-//    //switch on the row
-//    digitalWrite(ROW[i],0);
-//    //wait a little bit
-//    delay(50);
-//    //read all columns
-//    for(int j = 0; j < 8; j++){
-//      int tempRead;
-//      //read the column and put in the temporary variable
-//      tempRead = digitalRead(COLUMN[j]);
-//      //read confirmation after a 1/2 second
-//      if(tempRead != board[i][j]){
-//        delay(500);
-//        board[i][j] = digitalRead(COLUMN[j]);
-//      }
-//    }
-//    //switch off the row
-//    digitalWrite(ROW[i],1);
-//  }
+  //security setup -> all rows switched off
+  for(int i = 0; i < 8; i++){
+    digitalWrite(ROW[i],1);;
+  }
+
+  for(int i = 0; i < 8; i++){
+    //switch on the row
+    digitalWrite(ROW[i],0);
+    //wait a little bit
+    delay(10);
+    //read all columns
+    for(int j = 0; j < 8; j++){
+      int tempRead;
+      //read the column and put in the temporary variable
+      tempRead = digitalRead(COLUMN[j]);
+      //read confirmation after a 1/2 second
+      if(tempRead != board[i][j]){
+        delay(100);
+        board[i][j] = digitalRead(COLUMN[j]);
+      }
+    }
+    //switch off the row
+    digitalWrite(ROW[i],1);
+  }
 }
 
 void printBoard(int **board){
@@ -162,5 +162,10 @@ bool isYToEnd(){
     return true;
   else
     return false;
+}
+
+void stepperYToZero(){
+  while(!isYToZero())
+    yStepper.step(-1);
 }
 
