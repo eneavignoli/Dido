@@ -61,8 +61,8 @@ def initialSetup():
     pygame.font.init()
     #setup the display
     global DISPLAYSURF
-    #DISPLAYSURF = pygame.display.set_mode((BOARDWIDTH*SQUARESIZE,BOARDHEIGHT*SQUARESIZE),pygame.FULLSCREEN)
-    DISPLAYSURF = pygame.display.set_mode((BOARDWIDTH*SQUARESIZE,BOARDHEIGHT*SQUARESIZE))
+    DISPLAYSURF = pygame.display.set_mode((BOARDWIDTH*SQUARESIZE,BOARDHEIGHT*SQUARESIZE),pygame.FULLSCREEN)
+    #DISPLAYSURF = pygame.display.set_mode((BOARDWIDTH*SQUARESIZE,BOARDHEIGHT*SQUARESIZE))
     #give a name to the window
     pygame.display.set_caption('Odysseus')
     pygame.display.set_icon(pygame.image.load('img/odysseus_logo.png').convert_alpha())
@@ -131,6 +131,15 @@ def initialOptions():
                 #end game and close the window
                 pygame.quit()
                 sys.exit()
+            # This block is executed once for each MOUSEBUTTONDOWN event.
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                # 1 is the left mouse button, 2 is middle, 3 is right.
+                if event.button == 1:
+                    # `event.pos` is the mouse position.
+                    if event.pos[0] >= 90 and event.pos[0] <= 170 and event.pos[1] >= 130 and event.pos[1] <= 170:
+                        return AI
+                    elif event.pos[0] >= 300 and event.pos[0] <= 380 and event.pos[1] >= 130 and event.pos[1] <= 170:
+                        return human
         #print
         DISPLAYSURF.blit(optionsText,(60, 70))
         #draw buttons
@@ -271,6 +280,7 @@ def sendToArduino(message):
 def main():
     initialSetup()
     initialOptions()
+    sendToArduino('S')
     #core of the program
     while True:
         #get all the user events
